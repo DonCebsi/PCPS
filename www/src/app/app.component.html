@@ -1,0 +1,10 @@
+<div class="full-size">
+	<header>
+		<img class="logo" src="/assets/PlantX_logo.svg" routerLink="/" />
+		<div class="flex-grow"></div>
+		<plant-creator *ngIf="router.url === '/plants'"></plant-creator>
+	</header>
+	<section class="content">
+		<router-outlet></router-outlet>
+	</section>
+</div>

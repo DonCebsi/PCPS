@@ -1,0 +1,13 @@
+<button (click)="showDialog = true">Import</button>
+<div *ngIf="showDialog" class="overlay-shadow">
+	<form >
+	<div class="overlay-content shadow-box">
+		<input onclick="this.value = null" (change)="fileChange($event)" type="file" required>
+		<span><input [(ngModel)]="override" type="checkbox">override</span><br>
+		<div style="width: 100%; text-align: right;">
+			<button (click)="showDialog = false" class="btn-cancel">Cancel</button>
+			<button (click)="import()" class="btn-submit">Import</button>
+		</div>
+	</div>
+	</form>
+</div>

@@ -1,0 +1,150 @@
+<button (click)="showDialog = true">New</button>
+<div *ngIf="showDialog" class="overlay-shadow">
+	<div class="overlay-content shadow-box">
+		<div *ngIf="!templateCreator" class="createPage">
+			<div>
+				Name: <input id="plant-name" [(ngModel)]="plantName" type="text" required><br>
+				Template:<br>
+				<select id="plant-template" [(ngModel)]="templateSelect" [required]="false" >
+					<option disabled selected value> select template </option>
+					<option *ngFor="let template of templates; let i = index; trackBy: track" value="{{template.name}}">
+						{{template.name}}
+					</option>
+				</select>
+				<button style="padding: 2px 5px;" (click)="templateCreator = true">New...</button>
+				<button style="padding: 2px 5px;" (click)="templateDelete()" class="btn-cancel">Delete</button><br>
+			</div>
+			<div style="width: 100%; text-align: right;"><button (click)="showDialog = false" class="btn-cancel">Cancel</button><button (click)="plantSubmit()">Create</button></div>
+		</div>
+		<div *ngIf="templateCreator" id="template-creator" class="createPage flex-row">
+			<div class="paramBlock">
+				<h3>General</h3>
+				<div>
+					<div>name</div>
+					<input [(ngModel)]="template.name" type="text" required>
+				</div>
+				<div>
+					<div>max. size</div>
+					<input [(ngModel)]="template.maxSize" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>grow speed</div>
+					<input [(ngModel)]="template.growSpeed" type="number" min="0.01" max="0.99" step="0.00001" required>
+				</div>
+				<div>
+					<div>regeneration speed</div>
+					<input [(ngModel)]="template.regenerationSpeed" type="number" min="0.01" step="0.00001" required>
+				</div>
+			</div>
+			<div class="paramBlock">
+				<h3>Temperature</h3>
+				<div>
+					<div>min.</div>
+					<input [(ngModel)]="template.tempRange.min" type="number" min="-40" max="80" step="0.01" required>
+				</div>
+				<div>
+					<div>max.</div>
+					<input [(ngModel)]="template.tempRange.max" type="number" min="-40" max="80" step="0.01" required>
+				</div>
+				<div>
+					<div>optimum</div>
+					<input [(ngModel)]="template.tempBoost.optimum" type="number" min="-40" max="80" step="0.01" required>
+				</div>
+				<div>
+					<div>boost range</div>
+					<input [(ngModel)]="template.tempBoost.range" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>boost</div>
+					<input [(ngModel)]="template.tempBoost.amount" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>susceptibility</div>
+					<input [(ngModel)]="template.tempBoost.susceptibility" type="number" min="0.00001" max="99.99999" step="0.00001" required>
+				</div>
+			</div>
+			<div class="paramBlock">
+				<h3>Moisture</h3>
+				<div>
+					<div>threshold</div>
+					<input [(ngModel)]="template.moistureThreshold" type="number" min="0" max="950" required>
+				</div>
+				<div>
+					<div>struggle sec</div>
+					<input [(ngModel)]="template.moistureStruggleSeconds" type="number" min="0" required>
+				</div>
+				<div>
+					<div>lack susceptibility</div>
+					<input [(ngModel)]="template.moistureLackSusceptibility" type="number" min="0.00001" max="99.99999" step="0.00001" required>
+				</div>
+				<div>
+					<div>can get above ground</div>
+					<input [(ngModel)]="template.waterCanGetAboveGround" type="checkbox" style="-moz-appearance: checkbox !important">
+				</div>
+			</div>
+			<div class="paramBlock">
+				<h3>Humidity</h3>
+				<div>
+					<div>min.</div>
+					<input [(ngModel)]="template.humidityRange.min" type="number" min="5" max="99" step="0.01" required>
+				</div>
+				<div>
+					<div>max.</div>
+					<input [(ngModel)]="template.humidityRange.max" type="number" min="5" max="99" step="0.01" required>
+				</div>
+				<div>
+					<div>optimum</div>
+					<input [(ngModel)]="template.humidityBoost.optimum" type="number" min="5" max="99" step="0.01" required>
+				</div>
+				<div>
+					<div>range</div>
+					<input [(ngModel)]="template.humidityBoost.range" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>boost</div>
+					<input [(ngModel)]="template.humidityBoost.amount" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>susceptibility</div>
+					<input [(ngModel)]="template.humidityBoost.susceptibility" type="number" min="0.00001" max="99.99999" step="0.00001" required>
+				</div>
+			</div>
+			<div class="paramBlock">
+				<h3>Light</h3>
+				<div>
+					<div>optimum</div>
+					<input [(ngModel)]="template.lightBoost.optimum" type="number" min="0" max="40000" step="0.01" required>
+				</div>
+				<div>
+					<div>boost range</div>
+					<input [(ngModel)]="template.lightBoost.range" type="number" min="0.01" max="100" step="0.01" required>
+				</div>
+				<div>
+					<div>boost</div>
+					<input [(ngModel)]="template.lightBoost.amount" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>light susceptibility</div>
+					<input [(ngModel)]="template.lightBoost.susceptibility" type="number" min="0.00001" max="99.99999" step="0.00001" required>
+				</div>
+				<div>
+					<div>dark susceptibility</div>
+					<input [(ngModel)]="template.darkSusceptibility" type="number" min="0.00001" max="99.99999" step="0.00001" required>
+				</div>
+				<div>
+					<div>max dark sec</div>
+					<input [(ngModel)]="template.darkMaxSeconds" type="number" min="0.01" step="0.01" required>
+				</div>
+				<div>
+					<div>max light sec</div>
+					<input [(ngModel)]="template.lightMaxSeconds" type="number" min="0" step="0.01" required>
+				</div>
+				<div>
+					<div>threshold</div>
+					<input [(ngModel)]="template.darkLightThreshold" type="number" min="0" max="40000" step="0.01" required>
+				</div>
+			</div>
+			<div style="width: 100%; text-align: right;"><button (click)="templateCreator = false" class="btn-cancel">Cancel</button><button (click)="templateSubmit()">Create</button></div>
+		</div>
+	</div>
+</div>

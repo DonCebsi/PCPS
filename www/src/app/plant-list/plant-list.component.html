@@ -1,0 +1,20 @@
+<div *ngIf="httpErrorCode === null" class="plant-list">
+	<div class="shadow-box plant-prev" *ngFor="let plant of plants; let i = index; trackBy: track" routerLink="/plants/{{plant.name}}" [ngClass]="{'deployed': !!plant.deployed || plant.deployed===0, 'undeployed': !(!!plant.deployed || plant.deployed===0)}">
+		<b>{{plant.name}}</b><br>
+		<img *ngIf="plant.status" src="/assets/{{ plant.status }}.bmp" /><br>
+		<div>size: {{ plant.size!=null ? plant.size.toFixed(2) : '---' }} m</div>
+		<div>health: {{ plant.health!=null ? plant.health.toFixed(2) : '---' }} %</div>
+		<div>deployed: {{ plant.deployed!=null ? plant.deployed : false }}</div>
+		<div>temperature: {{ plant.temperature!=null ? plant.temperature.toFixed(2) : '---' }} &#xB0;C</div>
+		<div>moisture: {{ plant.moisture!=null ? plant.moisture.toFixed(2) : '---' }}</div>
+		<div>humidity: {{ plant.humidity!=null ? plant.humidity.toFixed(2) : '---' }} %</div>
+		<div>brightness: {{ plant.brightness!=null ? plant.brightness.toFixed(2) : '---' }}</div>
+		<div>waterAboveGround: {{ plant.waterAboveGround!=null ? plant.waterAboveGround : '---' }}</div>
+	</div>
+	<div style="color: #7c7c7c; text-align: center; padding: 150px" class="flex-shrink" *ngIf="plants.length == 0">
+		<img src="/assets/noplant_placeholder.svg" style="width: 500px; max-width: 100%"><br>
+		<h2>There seems to be no plants here.</h2>
+		<h2>Click 'New' at the top to create some!</h2>
+	</div>
+</div>
+<div *ngIf="httpErrorCode != null" [innerHTML]="httpErrorMessage" style="text-align: center; padding: 150px; color: #7c7c7c;"></div>

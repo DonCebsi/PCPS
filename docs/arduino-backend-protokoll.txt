@@ -1,0 +1,114 @@
+PROTOKOLL: ARDUINO <=> BACKEND
+
+Die Variablen haben alle ihre Typen und ihr C Memory Layout.
+Die Bytes der Typen werden einfach "neu interpretiert".
+Das entstehende Byte-Array wird direkt über WiFi verschickt.
+
+Es gibt 4 Nachrichtentypen mit jeweils verschiedener Payload.
+Alle haben den gleichen Header bestehend aus
+    - MessageType: uint8_t
+    - ArduinoID: uint8_t
+    - Timestamp: 32-bit Unix timestamp
+
+>> PING:    Wird regelmäßig vom Arduino zum Pi geschickt.
+            Wenn dieser nicht innerhalb von 10s mit einem weiteren PING
+            antwortet, geht der Arduino davon aus, dass er unerreichbar ist,
+            beginnt mit komprimierter Datenspeicherung und überprüft
+            die Verbindung alle 10 Sekunden.
+
+            Layout:
+            0        1        2        3        4        5        6
+            |--------|--------|--------|--------|--------|--------|
+            |   0    |   ID   |             Timestamp             |
+            |--------|--------|--------|--------|--------|--------|
+
+>> STATE:   Wird regelmäßig vom Arduino zum Pi geschickt.
+            Dieser soll die Daten auslesen und archivieren.
+            
+            Layout:
+            0        1        2        3        4        5        6        7        8
+            |--------|--------|--------|--------|--------|--------|--------|--------|
+            |   1    |   ID   |         Timestamp                 |       Progress
+            |--------|--------|--------|--------|--------|--------|--------|--------|
+                   ...        |              Health               |
+            |--------|--------|--------|--------|--------|--------|
+
+            Die Daten haben folgende Typen:
+            - Size: float
+            - Health: float
+
+>> SENSORS: Wird regelmäßig vom Arduino zum Pi geschickt.
+            Dieser soll die Daten auslesen und archivieren.
+
+            Layout:
+            0        1        2        3        4        5        6        7        8
+            |--------|--------|--------|--------|--------|--------|--------|--------|
+            |   2    |   ID   |             Timestamp             | Water  |  Light
+            |--------|--------|--------|--------|--------|--------|--------|--------|
+               ...   |    Moisture     |             Temperature           |   Hum-
+            |--------|--------|--------|--------|--------|--------|--------|--------|
+                   -idity              |
+            |--------|--------|--------|
+
+            Die Daten haben folgende Typen:
+            - Water: bool
+            - Light: uint16_t
+            - Moisture: uint16_t
+            - Temperature: float
+            - Humidity: float
+
+>> SPEC:    Kann vom Raspberry Pi zum Arduino geschickt werden, um den Typ
+            einer Pflanze (und damit ihr Entwicklungsverhalten) festzulegen
+
+            Layout:
+            Analog zu den bisherigen mit den Daten aus Plant.h.
+            Ranges und BoostParameters werden direkt eingebettet.
+
+
+
+
+Recommended Protocol to send a complete data about a plant
+over to arduino
+
+types of data same as specified in earlier protocols or in plant.h file.
+
+
+0	 1		   9					108
+|----|---------|----------------------|
+|-id-|status---|--properties----------|
+
+status (set to zero in case of a new plant)
+
+
+0		 4		 8
+|--------|-------|
+|-health-|-size--|
+
+
+
+
+properties
+0		  4     	  8		   12			16			   20
+|---------|-----------|---------|------------|--------------|
+|-maxSize-|-growSpeed-|regSpeed-|tempRangemin|tempRangeMax--|...
+
+20			24			   28			32				  34
+|------------|--------------|------------|-----------------|
+|tempBoostAmt|tempBoostRange|tempBoostSus|moistureThreshold|....
+
+34			   38			   42			  43
+|---------------|---------------|--------------|
+|moistureStrugle|moistureLackSus|WaterCanAboveGr.....
+
+43				47				 51		    	 55
+|----------------|----------------|---------------|
+|humidityRangeMin|HumidityRangeMax|HumidityBoostmt|
+
+55				  59				 63			71			79
+|------------------|------------------|----------|-----------|
+|HumidityBoostRange|HumidityBoostRange|darkMaxSec|lightMaxSec|..
+
+
+79				  83			87			  91 			  95        	 99
+|------------------|------------|--------------|---------------|--------------|
+|darkLightThreshold|darkSuscept-||lightBoostAmt|lightBoostRange|lightBoostSusc|

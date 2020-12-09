@@ -1,0 +1,39 @@
+.plant-detail {
+	margin: 20px auto;
+	max-width: 80vw;
+	padding: 15px;
+}
+
+.chart-row {
+	width: 100%;
+}
+
+.plant-detail img {
+	max-height: 300px;
+}
+
+.back-btn {
+	padding: 0 5px;
+}
+
+.overlay-shadow {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0,0.5);
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+	z-index: 1000;
+}
+
+.overlay-content {
+	padding: 15px;
+	margin: 15px;
+	flex-shrink: 1;
+	overflow: auto;
+}

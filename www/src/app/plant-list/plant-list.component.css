@@ -1,0 +1,31 @@
+.plant-list {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 10px 0;
+}
+
+.plant-prev {
+	width: 200px;
+	margin: 10px;
+	padding: 5px;
+}
+
+.plant-prev:hover {
+	background-color: #ccf;
+}
+
+.undeployed {
+	opacity: 0.5;
+}
+
+.deployed {
+	box-shadow: 0 0 10px rgb(97, 97, 255);
+}
+
+.plant-prev img{
+	max-width: 100%;
+	max-height: 100%;
+}

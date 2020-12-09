@@ -1,0 +1,40 @@
+<div [ngClass]="{'hidden' : httpErrorCode != null}" class="plant-detail shadow-box flex-column">
+	<div class="flex flex-row">
+		<h2><span class="pointer back-btn" routerLink="/plants" >&#x21d0;</span>{{this.name}}</h2>
+		<div class="flex-grow"></div>
+		<button (click)="showDeployDiag = true">Deploy</button>
+		<button (click)="delete()">Delete</button>
+	</div>
+	<div class="flex-row flex-stretch">
+		<div *ngIf="plant && plant.status != null">
+			<img src="/assets/{{ plant.status }}.bmp" />
+		</div>
+		<div *ngIf="plant">
+			<div>size: {{ plant.size.length ? plant.size.slice(-1)[0].toFixed(2) : '---' }} m</div>
+			<div>health: {{ plant.health.length ? plant.health.slice(-1)[0].toFixed(2) : '---' }} %</div>
+			<div>deployed: {{ plant ? (plant.deployed || false) : '---'}}</div>
+			<div>temperature: {{ plant.temperature.length ? plant.temperature.slice(-1)[0].toFixed(2) : '---' }} &#xB0;C</div>
+			<div>moisture: {{ plant.moisture.length ? plant.moisture.slice(-1)[0].toFixed(2) : '---' }}</div>
+			<div>humidity: {{ plant.humidity.length ? plant.humidity.slice(-1)[0].toFixed(2) : '---' }} %</div>
+			<div>brightness: {{ plant.brightness.length ? plant.brightness.slice(-1)[0].toFixed(2) : '---' }}</div>
+			<div>waterAboveGround: {{ plant.waterAboveGround.length ? plant.waterAboveGround.slice(-1)[0] : '---' }}</div>
+		</div>
+	</div>
+	<div class="chart-row">
+		<canvas id="canvas"></canvas>
+		Filter:<br>
+		min:<input type="number" [(ngModel)]="timeMin" min=0 >
+		max:<input type="number" [(ngModel)]="timeMax" max=4294967295000 >
+		#samples:<input type="number" [(ngModel)]="limit" (ngModelChange)="alert()" min=1 >
+	</div>
+</div>
+<div *ngIf="httpErrorCode != null" [innerHTML]="httpErrorMessage" style="text-align: center; padding: 150px; color: #7c7c7c;"></div>
+<div *ngIf="showDeployDiag" class="overlay-shadow">
+	<div class="overlay-content shadow-box">
+		Node: <select [(ngModel)]="nodeSelect">
+			<option disabled selected value> select node </option>
+			<option *ngFor="let node of nodes; trackBy: trackNodes" [disabled]="!node.active" [value]="node.name">{{node.name}} [{{node.plant==null || 'free'}}]</option>
+		</select><br>
+		<button (click)="showDeployDiag = false" >Cancel</button><button (click)="deploy()">Deploy</button>
+	</div>
+</div>
